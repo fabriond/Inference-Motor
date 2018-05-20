@@ -12,14 +12,17 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 
+import org.apache.commons.lang3.tuple.Triple;
+
 public class Motor {
 	static final String filepath = "rules.txt";
 	static final String auxFilepath = "aux.txt";
 	static Scanner scan = new Scanner(System.in);
 	static boolean concDisplay = false; 
 	static List<Sentence> sentences = new ArrayList<>();
-	static List<String> atoms = new ArrayList<>();
+	static List<Triple<String, String, Double>> atoms = new ArrayList<>();
 	static Set<String> conclusions = new HashSet<>();
+	static Set<Triple<String, String, Double>> histConclusions = new HashSet<>();
 	static String history;
 	static VariableMap vm;
 	
@@ -44,14 +47,14 @@ public class Motor {
 	public static void readDatabase() throws IOException {
 		BufferedReader reader = new BufferedReader(new FileReader(filepath));
 		String line = reader.readLine();
-		Set<String> auxAtoms = new HashSet<>();
+		Set<Triple<String, String, Double>> auxAtoms = new HashSet<>();
 		while(line != null) {
 			if(!line.isEmpty()) {
 				String sent[] = line.replace("SE", "").split("ENTAO");
 				String conds[] = sent[0].split("OU");
 				for(int i = 0; i < conds.length; i++) {
 					Sentence sentence = new Sentence(conds[i], sent[1], vm);
-					sentences.add(sentence);
+					sentences.add(sentence); 
 					auxAtoms.addAll(sentence.getConditions());
 				}
 			}
@@ -97,9 +100,13 @@ public class Motor {
 	
 	//TOP-DOWN
 	public static void askQuestions() {
+		//vm.printMap();
 		for(int i = 0; i < atoms.size(); i++) {
-			String cond = atoms.get(i);
-			if(vm.checkVariable(cond)) {
+			Triple<String, String, Double> cond = atoms.get(i);
+			//DEBUG System.out.println("NEW");
+			//DEBUG System.out.println(cond.getLeft()+" "+ cond.getMiddle()+" "+ cond.getRight());
+			if(vm.checkTriple(cond)) {
+				//DEBUG System.out.println("TRUE");
 				checkTrue(cond);
 			}
 		}
@@ -107,7 +114,7 @@ public class Motor {
 		else printConclusion(conclusions);
 	}
 	
-	public static void removeQuestions(String cond) {
+	public static void removeQuestions(Triple<String, String, Double> cond) {
 		for(int i = 0; i < sentences.size(); i++) {
 			//if you say A is true, then there's no reason to ask if C is true if C only implies A
 			if(sentences.get(i).checkConclusion(cond)) {
@@ -117,20 +124,23 @@ public class Motor {
 		}
 	}
 	
-	public static void checkTrue(String cond) {
+	public static void checkTrue(Triple<String, String, Double> cond) {
 		//removes C => A from sentences, if A was already said to be true
 		removeQuestions(cond);
 		for(int i = 0; i < sentences.size(); i++) {
 			Sentence sent = sentences.get(i);
-			List<String> concl = sent.validateCondition(cond);
+			List<Triple<String, String, Double>> concl = sent.validateCondition(cond);
 			if(concl != null) {
 				List<String> aux = new ArrayList<>();
-				concl.forEach(f -> {if(conclusions.add(f)) aux.add(f);});					
-				
+				concl.forEach(f -> {
+					if(histConclusions.add(f)) aux.add(f.getLeft());
+					if(f.getLeft().matches("\"(.*)\"")) conclusions.add(f.getLeft());
+				});					
+
 				history += sent.getWholeCondition()+" => "+getHistory(aux);
 				
 				sentences.remove(sent);
-				atoms.removeAll(conclusions);
+				atoms.removeAll(histConclusions);
 				concl.forEach(j -> checkTrue(j));
 			}
 		}
@@ -155,5 +165,9 @@ public class Motor {
 			sep = " E ";
 		}
 		return result+"\n";
+	}
+	
+	public static void printList(List<String> list) {
+		list.forEach(a -> System.out.println(a));
 	}
 }
