@@ -3,7 +3,7 @@
 Motor de inferência desenvolvido para o projeto MeuPredi, colocado num repositório separado para que possa ser melhor avaliado na disciplina de Inteligência Artificial
 
 ## Regras
-As regras do motor de inferência se encontram no arquivo rules.txt e devem seguir o padrão:
+As regras do motor de inferência tem que estar no arquivo rules.txt(e esse arquivo tem que existir) e devem seguir o padrão:
 
 **SE (condição) ENTAO (conclusão)**
 
