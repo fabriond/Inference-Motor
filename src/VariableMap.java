@@ -20,7 +20,13 @@ public class VariableMap {
 	}
 	
 	public void addUserInfo(Triple<String, String, Double> t) {
-		this.userTable.put(t.getLeft(), t.getRight());
+		if(t.getMiddle().equals(">")) this.userTable.put(t.getLeft(), t.getRight()+0.001);
+		else if(t.getMiddle().equals("<")) this.userTable.put(t.getLeft(), t.getRight()-0.001);
+		else if(t.getMiddle().equals("!=")) {
+			if(t.getRight().equals(0.0)) this.userTable.put(t.getLeft(), -Double.MAX_VALUE);
+			else this.userTable.put(t.getLeft(), 0.0);
+		}
+		else this.userTable.put(t.getLeft(), t.getRight());
 	}
 	
 	public void addVariable(Triple<String, String, Double> triple) {

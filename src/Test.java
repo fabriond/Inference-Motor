@@ -4,18 +4,12 @@ import java.util.Map;
 
 public class Test {
 	static Map<String, Double> userVariables;
+	static Map<String, Double> userVariables2;
 	static {
 		userVariables = new HashMap<String, Double>();
-		userVariables.put("glicemiaJejum", 130.0);
-		userVariables.put("glicemia2h", 30.0);
+		userVariables.put("glicemiaJejum", 140.0);
+		userVariables.put("glicemia2h", 110.0);
 		userVariables.put("idade", 45.0);
-		userVariables.put("testeGlicêmico", 0.0);
-		userVariables.put("Ttg", 0.0); // (Teste de tolerancia a glicose)
-		userVariables.put("Gja", 0.0); // (Glicose em jejum alterada)
-		userVariables.put("Tdg", 0.0); // (Tolerancia diminuída a glicose)
-		userVariables.put("Dm2", 0.0); // (Diabetes 2)
-		userVariables.put("Mev", 0.0); // (Mudança no estilo de vida)
-		userVariables.put("alcançouMetas", 1.0);
 	}
 	
 	public static void main(String[] args) throws IOException {

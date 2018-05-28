@@ -166,8 +166,4 @@ public class Motor {
 		}
 		return result+"\n";
 	}
-	
-	public static void printList(List<String> list) {
-		list.forEach(a -> System.out.println(a));
-	}
 }
