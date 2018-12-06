@@ -1,4 +1,4 @@
-# MeuPrediAUX
+# Motor de inferência
 
 Motor de inferência desenvolvido para o projeto MeuPredi, colocado num repositório separado para que possa ser melhor avaliado na disciplina de Inteligência Artificial
 
