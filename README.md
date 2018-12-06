@@ -1,6 +1,6 @@
 # Motor de inferência
 
-Motor de inferência desenvolvido para o projeto MeuPredi, colocado num repositório separado para que possa ser melhor avaliado na disciplina de Inteligência Artificial
+Motor de inferência desenvolvido para a disciplina de Inteligência Artificial 1
 
 ## Regras
 As regras do motor de inferência tem que estar no arquivo rules.txt(e esse arquivo tem que existir) e devem seguir o padrão:
